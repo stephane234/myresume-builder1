@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Header from './Header';
-import TemplatePreview from './TemplatePreview';  // Add this import
+import TemplatePreview from './TemplatePreview';
 
 const TemplateSelection = () => {
   const navigate = useNavigate();
@@ -11,7 +11,17 @@ const TemplateSelection = () => {
     {
       id: 1,
       name: 'Professional',
-      description: 'Clean and modern design for all industries',
+      description: 'Clean and modern design perfect for any industry. Features a two-column layout with clear section organization.'
+    },
+    {
+      id: 2,
+      name: 'Creative',
+      description: 'Modern and unique design ideal for creative professionals. Includes a bold sidebar and dynamic layout.'
+    },
+    {
+      id: 3,
+      name: 'Executive',
+      description: 'Traditional and elegant design perfect for senior positions. Features a formal layout with balanced sections.'
     }
   ];
 
@@ -32,13 +42,39 @@ const TemplateSelection = () => {
     <div className="min-h-screen bg-gray-50">
       <Header />
       <main className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
+        {/* Step Indicator */}
+        <div className="mb-8">
+          <div className="flex justify-center items-center space-x-4">
+            <div className="flex items-center">
+              <div className="w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center">
+                1
+              </div>
+              <span className="ml-2 text-blue-600 font-medium">Select Template</span>
+            </div>
+            <div className="w-16 h-1 bg-gray-300"></div>
+            <div className="flex items-center">
+              <div className="w-8 h-8 bg-gray-300 rounded-full flex items-center justify-center">
+                2
+              </div>
+              <span className="ml-2 text-gray-500">Build</span>
+            </div>
+            <div className="w-16 h-1 bg-gray-300"></div>
+            <div className="flex items-center">
+              <div className="w-8 h-8 bg-gray-300 rounded-full flex items-center justify-center">
+                3
+              </div>
+              <span className="ml-2 text-gray-500">Customize</span>
+            </div>
+          </div>
+        </div>
+
         {/* Main Content */}
         <div className="px-4 py-6 sm:px-0">
           <h2 className="text-2xl font-bold text-gray-900 mb-4">
             Select Your Template
           </h2>
           <p className="text-gray-600 mb-8">
-            Choose a professional template to start building your resume
+            Choose from our professionally designed templates to start your resume
           </p>
 
           {/* Template Grid */}

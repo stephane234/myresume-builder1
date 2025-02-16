@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Header from './Header';
 import PersonalForm from './PersonalForm';
+import ExperienceForm from './ExperienceForm';
 
 const BuildResume = () => {
   const navigate = useNavigate();
@@ -26,11 +27,16 @@ const BuildResume = () => {
   useEffect(() => {
     const template = localStorage.getItem('selectedTemplate');
     if (!template) {
-      navigate('/');
+      navigate('/templates'); // Redirect to template selection if none selected
     } else {
       setSelectedTemplate(JSON.parse(template));
     }
   }, [navigate]);
+
+  // If no template is selected, don't render the builder
+  if (!selectedTemplate) {
+    return null; // Or you could return a loading spinner here
+  }
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -141,7 +147,10 @@ const BuildResume = () => {
                 />
               )}
               {activeSection === 'experience' && (
-                <p>Experience form will go here</p>
+                <ExperienceForm 
+                  formData={formData}
+                  setFormData={setFormData}
+                />
               )}
               {activeSection === 'education' && (
                 <p>Education form will go here</p>
@@ -161,8 +170,52 @@ const BuildResume = () => {
           {/* Right Side - Preview */}
           <div className="w-1/2 bg-white rounded-lg shadow-lg p-6">
             <h2 className="text-2xl font-bold text-gray-900 mb-6">Preview</h2>
-            <div className="border rounded-lg h-[800px] bg-gray-50">
-              {/* Resume preview will go here */}
+            <div className="border rounded-lg h-[800px] bg-white p-8">
+              {/* Personal Information */}
+              <div className="border-b-2 border-gray-300 pb-4 mb-6">
+                <h1 className="text-3xl font-bold text-gray-900 mb-2">
+                  {formData.personal.fullName || 'Your Name'}
+                </h1>
+                <div className="text-gray-600 space-y-1">
+                  {formData.personal.email && <div>{formData.personal.email}</div>}
+                  {formData.personal.phone && <div>{formData.personal.phone}</div>}
+                  {formData.personal.location && <div>{formData.personal.location}</div>}
+                </div>
+                {formData.personal.summary && (
+                  <p className="mt-4 text-gray-700">{formData.personal.summary}</p>
+                )}
+              </div>
+
+              {/* Experience Section */}
+              {formData.experience.length > 0 && (
+                <div className="mb-6">
+                  <h2 className="text-xl font-bold text-gray-900 mb-4">Experience</h2>
+                  <div className="space-y-4">
+                    {formData.experience.map((exp, index) => (
+                      <div key={index} className="border-l-2 border-gray-200 pl-4">
+                        <div className="flex justify-between items-start">
+                          <div>
+                            <h3 className="font-bold text-gray-800">{exp.position || 'Position'}</h3>
+                            <div className="text-gray-600">{exp.company || 'Company'}</div>
+                          </div>
+                          <div className="text-sm text-gray-500">
+                            {exp.startDate && `${exp.startDate} - `}
+                            {exp.current ? 'Present' : exp.endDate}
+                          </div>
+                        </div>
+                        {exp.location && (
+                          <div className="text-gray-600 text-sm">{exp.location}</div>
+                        )}
+                        {exp.description && (
+                          <p className="mt-2 text-gray-700 text-sm">{exp.description}</p>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Other sections will be added as we implement them */}
             </div>
           </div>
         </div>

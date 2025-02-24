@@ -1,38 +1,45 @@
 const templates = {
-    template1: {
-      id: 1,
-      name: "Professional",
-      styles: {
-        container: "w-full h-full bg-white p-6",
-        
-        // Header with proper text wrapping
-        header: "flex justify-between items-start mb-4",
-        name: "text-2xl font-bold text-gray-900 break-words",
-        contactInfo: "text-sm text-right whitespace-pre-line",
-        
-        separator: "h-0.5 bg-blue-600 my-3",
-        
-        // Main content with fixed heights and proper overflow handling
-        mainContent: "grid grid-cols-[70%,30%] gap-6",
-        
-        // Left column sections with controlled spacing
-        leftSection: "mb-6",
-        sectionTitle: "uppercase text-blue-600 font-bold text-sm mb-2",
-        summaryText: "text-sm whitespace-pre-wrap", // Handle line breaks properly
-        
-        // Experience items with proper spacing
-        experienceItem: "mb-4",
-        experienceHeader: "flex justify-between items-start",
-        experienceTitle: "font-bold text-sm",
-        experienceCompany: "text-sm",
-        experienceDate: "text-sm text-gray-600 shrink-0 ml-2", // Prevent date from wrapping
-        experienceDescription: "text-sm mt-1 whitespace-pre-wrap", // Handle line breaks in description
-        
-        // Right column with proper spacing
-        rightSection: "mb-6",
-        skillsList: "text-sm space-y-1"
-      }
+  template1: {
+    id: 1,
+    name: "Professional",
+    styles: {
+      // A4 container
+      container: "w-[210mm] h-[297mm] bg-white mx-auto p-[20mm] overflow-hidden",
+      
+      // Header section
+      header: "flex justify-between items-start mb-2",
+      name: "text-xl font-bold text-gray-900",
+      contactInfo: "text-xs text-right",
+      
+      separator: "h-0.5 bg-blue-600 my-2",
+      
+      // Main content - adjusted to remove extra space
+      mainContent: "grid grid-cols-[70%,30%] gap-4",
+      
+      // Left column - tighter spacing
+      leftSection: "mb-2 last:mb-0", // Removed extra margin from last section
+      sectionTitle: "uppercase text-blue-600 font-bold text-xs mb-1",
+      summaryText: "text-xs leading-tight",
+      
+      // Experience items - compact
+      // Inside the styles object
+experienceItem: "mb-2 last:mb-0",
+experienceHeader: "flex justify-between items-start",
+experienceTitle: "font-bold text-xs",
+experienceCompany: "text-xs text-gray-600", // Style for both company and location
+experienceDate: "text-xs text-gray-600 shrink-0 ml-2",
+experienceDescription: "text-xs mt-1 leading-tight",
+      
+      // Education section - adjusted spacing
+      educationItem: "mb-1 last:mb-0", // Tighter spacing for education items
+      educationTitle: "font-bold text-xs",
+      educationDetails: "text-xs text-gray-600",
+      
+      // Right column
+      rightSection: "mb-2 last:mb-0",
+      skillsList: "text-xs space-y-0.5" // Reduced spacing between items
     }
-  };
-  
-  export default templates;
+  }
+};
+
+export default templates;

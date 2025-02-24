@@ -1,6 +1,12 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 const ExperienceForm = ({ formData, setFormData }) => {
+  // Add state for validation errors
+  const [dateErrors, setDateErrors] = useState({});
+  
+  // Get today's date in YYYY-MM format
+  const today = new Date().toISOString().slice(0, 7);
+
   const handleAddExperience = () => {
     setFormData(prev => ({
       ...prev,
@@ -21,6 +27,46 @@ const ExperienceForm = ({ formData, setFormData }) => {
   };
 
   const handleExperienceChange = (index, field, value) => {
+    // Date validation
+    if (field === 'startDate') {
+      if (value > today) {
+        setDateErrors(prev => ({
+          ...prev,
+          [`${index}-startDate`]: 'Start date cannot be in the future'
+        }));
+        return;
+      } else {
+        setDateErrors(prev => {
+          const newErrors = { ...prev };
+          delete newErrors[`${index}-startDate`];
+          return newErrors;
+        });
+      }
+    }
+
+    if (field === 'endDate') {
+      const experience = formData.experience[index];
+      if (value > today) {
+        setDateErrors(prev => ({
+          ...prev,
+          [`${index}-endDate`]: 'End date cannot be in the future'
+        }));
+        return;
+      } else if (value < experience.startDate) {
+        setDateErrors(prev => ({
+          ...prev,
+          [`${index}-endDate`]: 'End date must be after start date'
+        }));
+        return;
+      } else {
+        setDateErrors(prev => {
+          const newErrors = { ...prev };
+          delete newErrors[`${index}-endDate`];
+          return newErrors;
+        });
+      }
+    }
+
     setFormData(prev => ({
       ...prev,
       experience: prev.experience.map((exp, i) => 
@@ -34,6 +80,13 @@ const ExperienceForm = ({ formData, setFormData }) => {
       ...prev,
       experience: prev.experience.filter((_, i) => i !== index)
     }));
+    // Clear any errors for the removed experience
+    setDateErrors(prev => {
+      const newErrors = { ...prev };
+      delete newErrors[`${index}-startDate`];
+      delete newErrors[`${index}-endDate`];
+      return newErrors;
+    });
   };
 
   return (
@@ -53,6 +106,7 @@ const ExperienceForm = ({ formData, setFormData }) => {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {/* Company and Position fields remain the same */}
             <div>
               <label className="block text-sm font-medium text-gray-700">
                 Company *
@@ -96,10 +150,18 @@ const ExperienceForm = ({ formData, setFormData }) => {
                 </label>
                 <input
                   type="month"
+                  max={today}
                   value={exp.startDate}
                   onChange={(e) => handleExperienceChange(index, 'startDate', e.target.value)}
-                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                  className={`mt-1 block w-full rounded-md ${
+                    dateErrors[`${index}-startDate`] 
+                      ? 'border-red-300 focus:ring-red-500 focus:border-red-500' 
+                      : 'border-gray-300 focus:ring-blue-500 focus:border-blue-500'
+                  }`}
                 />
+                {dateErrors[`${index}-startDate`] && (
+                  <p className="mt-1 text-sm text-red-600">{dateErrors[`${index}-startDate`]}</p>
+                )}
               </div>
 
               <div>
@@ -108,11 +170,20 @@ const ExperienceForm = ({ formData, setFormData }) => {
                 </label>
                 <input
                   type="month"
+                  max={today}
+                  min={exp.startDate}
                   value={exp.endDate}
                   onChange={(e) => handleExperienceChange(index, 'endDate', e.target.value)}
                   disabled={exp.current}
-                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                  className={`mt-1 block w-full rounded-md ${
+                    dateErrors[`${index}-endDate`] 
+                      ? 'border-red-300 focus:ring-red-500 focus:border-red-500' 
+                      : 'border-gray-300 focus:ring-blue-500 focus:border-blue-500'
+                  }`}
                 />
+                {dateErrors[`${index}-endDate`] && (
+                  <p className="mt-1 text-sm text-red-600">{dateErrors[`${index}-endDate`]}</p>
+                )}
               </div>
             </div>
 

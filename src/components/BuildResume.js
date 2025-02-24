@@ -168,15 +168,19 @@ const BuildResume = () => {
           </div>
 
           {/* Right Side - Preview */}
-          <div className="w-1/2 bg-white rounded-lg shadow-lg p-6">
-            <h2 className="text-2xl font-bold text-gray-900 mb-6">Preview</h2>
-            <div className="border rounded-lg h-[800px] bg-white overflow-auto">
-              <ResumePreview
-                templateId={selectedTemplate.id}
-                formData={formData}
-              />
-            </div>
-          </div>
+          {/* Right Side - Preview */}
+<div className="w-1/2 bg-white rounded-lg shadow-lg p-6">
+  <h2 className="text-2xl font-bold text-gray-900 mb-6">Preview</h2>
+  <div className="border rounded-lg bg-white flex items-center justify-center">
+    {/* This will contain our A4 preview */}
+    <div className="transform scale-[0.7] origin-top">
+      <ResumePreview 
+        templateId={selectedTemplate.id}
+        formData={formData}
+      />
+    </div>
+  </div>
+</div>
         </div>
       </main>
     </div>

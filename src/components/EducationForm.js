@@ -4,9 +4,6 @@ const EducationForm = ({ formData, setFormData }) => {
   // Add state for validation errors
   const [dateErrors, setDateErrors] = useState({});
   
-  // Get today's date in YYYY-MM format
-  const today = new Date().toISOString().slice(0, 7);
-
   const handleAddEducation = () => {
     setFormData(prev => ({
       ...prev,
@@ -30,10 +27,11 @@ const EducationForm = ({ formData, setFormData }) => {
   const handleEducationChange = (index, field, value) => {
     // Date validation
     if (field === 'startDate') {
-      if (value > today) {
+      const currentYear = new Date().getFullYear();
+      if (value && parseInt(value) > currentYear) {
         setDateErrors(prev => ({
           ...prev,
-          [`${index}-startDate`]: 'Start date cannot be in the future'
+          [`${index}-startDate`]: 'Start year cannot be in the future'
         }));
         return;
       } else {
@@ -46,17 +44,18 @@ const EducationForm = ({ formData, setFormData }) => {
     }
 
     if (field === 'endDate') {
+      const currentYear = new Date().getFullYear();
       const education = formData.education[index];
-      if (value > today) {
+      if (value && parseInt(value) > currentYear) {
         setDateErrors(prev => ({
           ...prev,
-          [`${index}-endDate`]: 'End date cannot be in the future'
+          [`${index}-endDate`]: 'End year cannot be in the future'
         }));
         return;
-      } else if (value < education.startDate) {
+      } else if (value && education.startDate && parseInt(value) < parseInt(education.startDate)) {
         setDateErrors(prev => ({
           ...prev,
-          [`${index}-endDate`]: 'End date must be after start date'
+          [`${index}-endDate`]: 'End year must be after start year'
         }));
         return;
       } else {
@@ -91,26 +90,83 @@ const EducationForm = ({ formData, setFormData }) => {
     });
   };
 
-  // Update the date input fields in your JSX
   return (
     <div className="space-y-6">
       {formData.education.map((edu, index) => (
         <div key={edu.id} className="bg-gray-50 p-6 rounded-lg">
-          {/* ... other fields remain the same ... */}
+          <div className="flex justify-between items-center mb-4">
+            <h3 className="text-lg font-medium">Education {index + 1}</h3>
+            {formData.education.length > 1 && (
+              <button
+                onClick={() => handleRemoveEducation(index)}
+                className="text-red-600 hover:text-red-800"
+              >
+                Remove
+              </button>
+            )}
+          </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {/* ... school, degree, fieldOfStudy inputs ... */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700">
+                School/University *
+              </label>
+              <input
+                type="text"
+                value={edu.school}
+                onChange={(e) => handleEducationChange(index, 'school', e.target.value)}
+                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500"
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700">
+                Degree *
+              </label>
+              <input
+                type="text"
+                value={edu.degree}
+                onChange={(e) => handleEducationChange(index, 'degree', e.target.value)}
+                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                placeholder="BS, BA, MS, PhD, etc."
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700">
+                Field of Study *
+              </label>
+              <input
+                type="text"
+                value={edu.fieldOfStudy}
+                onChange={(e) => handleEducationChange(index, 'fieldOfStudy', e.target.value)}
+                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                placeholder="Computer Science, Business, etc."
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700">
+                Location
+              </label>
+              <input
+                type="text"
+                value={edu.location}
+                onChange={(e) => handleEducationChange(index, 'location', e.target.value)}
+                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500"
+              />
+            </div>
 
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700">
-                  Start Date *
+                  Start Year *
                 </label>
                 <input
-                  type="month"
-                  max={today}
+                  type="text"
                   value={edu.startDate}
                   onChange={(e) => handleEducationChange(index, 'startDate', e.target.value)}
+                  placeholder="2014"
                   className={`mt-1 block w-full rounded-md ${
                     dateErrors[`${index}-startDate`] 
                       ? 'border-red-300 focus:ring-red-500 focus:border-red-500' 
@@ -124,14 +180,13 @@ const EducationForm = ({ formData, setFormData }) => {
 
               <div>
                 <label className="block text-sm font-medium text-gray-700">
-                  End Date
+                  End Year
                 </label>
                 <input
-                  type="month"
-                  max={today}
-                  min={edu.startDate}
+                  type="text"
                   value={edu.endDate}
                   onChange={(e) => handleEducationChange(index, 'endDate', e.target.value)}
+                  placeholder="2018"
                   disabled={edu.current}
                   className={`mt-1 block w-full rounded-md ${
                     dateErrors[`${index}-endDate`] 
@@ -145,7 +200,19 @@ const EducationForm = ({ formData, setFormData }) => {
               </div>
             </div>
 
-            {/* ... rest of the form ... */}
+            <div className="md:col-span-2">
+              <div className="flex items-center">
+                <input
+                  type="checkbox"
+                  checked={edu.current}
+                  onChange={(e) => handleEducationChange(index, 'current', e.target.checked)}
+                  className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                />
+                <label className="ml-2 block text-sm text-gray-700">
+                  I currently study here
+                </label>
+              </div>
+            </div>
           </div>
         </div>
       ))}

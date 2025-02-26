@@ -30,11 +30,10 @@ experienceCompany: "text-xs text-gray-600", // Style for both company and locati
 experienceDate: "text-xs text-gray-600 shrink-0 ml-2",
 experienceDescription: "text-xs mt-1 leading-tight",
       
-      // Education section - adjusted spacing
-      educationItem: "mb-1 last:mb-0", // Tighter spacing for education items
-      educationTitle: "font-bold text-xs",
-      educationDetails: "text-xs text-gray-600",
-      
+      // Education styles
+educationItem: "mb-2",
+educationTitle: "font-medium text-sm", // For "BS Computer Science"
+educationInstitution: "text-sm", // For "Tech University • 2014-2018"
       // Right column
       rightSection: "mb-2 last:mb-0",
       skillsList: "text-xs space-y-0.5" // Reduced spacing between items

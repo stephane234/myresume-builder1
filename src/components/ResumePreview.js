@@ -70,36 +70,23 @@ const ResumePreview = ({ templateId, formData }) => {
           {/* Education */}
           {/* Education */}
 {/* Education Section */}
+{/* Education Section */}
 <div className={styles.leftSection}>
   <h2 className={styles.sectionTitle}>Education</h2>
   {(formData.education.length > 0 ? formData.education : [{
-    school: 'Tech University',
     degree: 'BS',
     fieldOfStudy: 'Computer Science',
-    location: 'Portland, OR',
+    school: 'Tech University',
     startDate: '2014',
-    endDate: '2018',
-    description: 'Relevant coursework in Software Engineering and Data Structures.'
+    endDate: '2018'
   }]).map((edu, index) => (
     <div key={index} className={styles.educationItem}>
-      <div className={styles.educationHeader}>
-        <div>
-          <div className={styles.educationTitle}>
-            {edu.degree} {edu.fieldOfStudy}
-          </div>
-          <div className={styles.educationInstitution}>
-            {edu.school}{edu.location && `, ${edu.location}`}
-          </div>
-        </div>
-        <div className={styles.educationDate}>
-          {edu.startDate} - {edu.current ? 'Present' : edu.endDate}
-        </div>
+      <div className={styles.educationTitle}>
+        {edu.degree} {edu.fieldOfStudy}
       </div>
-      {edu.description && (
-        <p className={styles.educationDescription}>
-          {edu.description}
-        </p>
-      )}
+      <div className={styles.educationInstitution}>
+        {edu.school}{edu.location ? `, ${edu.location}` : ''} • {edu.startDate}-{edu.current ? 'Present' : edu.endDate}
+      </div>
     </div>
   ))}
 </div>
